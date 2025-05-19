@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Light Controller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Light is <span id="status">{{ 'On' if status else 'Off' }}</span></h1>
+    <button onclick="toggleLight()">Toggle Light</button>
+
+    <script>
+        function toggleLight() {
+            fetch('/toggle', { method: 'POST' })
+                .then(() => updateStatus());
+        }
+
+        function updateStatus() {
+            fetch('/status')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status').textContent = data.status ? 'On' : 'Off';
+                });
+        }
+
+        // Automatically update status every second
+        setInterval(updateStatus, 1000);
+    </script>
+</body>
+</html>
